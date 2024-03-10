@@ -2,6 +2,7 @@ import { Elysia } from "elysia";
 import authRoutes from "./routes/authRoutes";
 import userRoutes from "./routes/userRoutes";
 import menuItemRoutes from "./routes/menuItemRoutes";
+import orderRoutes from "./routes/orderRoutes";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 
@@ -18,6 +19,7 @@ app.get("/", () => "Hello Elysia");
 app.use(authRoutes);
 app.use(userRoutes);
 app.use(menuItemRoutes);
+app.use(orderRoutes);
 
 app.listen(3000);
 
