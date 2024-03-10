@@ -30,6 +30,10 @@ export const restro: any = async (c: Context) => {
         try {
             restroname = c.headers.restaurant
             const restro = await RestaurantModel.findOne({ name: restroname })
+            if (!restro) {
+                c.set.status = 401
+                throw new Error('Not authorized, invalid restaurant')
+            }
             c.request.headers.set('restro', restro?._id.toString())
         } catch (error) {
             c.set.status = 401
