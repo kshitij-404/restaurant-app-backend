@@ -6,7 +6,13 @@
     "dev": "bun run --watch src/index.ts"
   },
   "dependencies": {
-    "elysia": "latest"
+    "axios": "^1.6.7",
+    "dotenv": "^16.4.5",
+    "elysia": "latest",
+    "google-auth-library": "^9.6.3",
+    "jose": "^5.2.3",
+    "mongoose": "^8.2.1",
+    "url": "^0.11.3"
   },
   "devDependencies": {
     "bun-types": "latest"
