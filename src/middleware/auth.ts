@@ -9,6 +9,7 @@ export const auth: any = async (c: Context) => {
         try {
             token = c.headers.authorization.split(' ')[1]
             const decoded = await jwt.verify(token)
+            console.log(decoded)
             const user = await UserModel.findById(decoded.id)
             
             c.request.headers.set('userId', user?._id.toString())
