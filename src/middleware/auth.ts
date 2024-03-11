@@ -4,46 +4,45 @@ import RestaurantModel from "../models/restaurantModel";
 import { jwt } from "../utils/jwt";
 
 export const auth: any = async (c: Context) => {
-    let token
-    if (c.headers.authorization && c.headers.authorization.startsWith('Bearer')) {
-        try {
-            token = c.headers.authorization.split(' ')[1]
-            const decoded = await jwt.verify(token)
-            console.log(decoded)
-            const user = await UserModel.findById(decoded.id)
-            
-            c.request.headers.set('userId', user?._id.toString())
-        } catch (error) {
-            c.set.status = 401
-            throw new Error('Not authorized, invalid token')
-        }
-    }
+  let token;
+  if (c.headers.authorization && c.headers.authorization.startsWith("Bearer")) {
+    try {
+      token = c.headers.authorization.split(" ")[1];
+      const decoded = await jwt.verify(token);
+      const user = await UserModel.findById(decoded.userId);
 
-    if (!token) {
-        c.set.status = 401
-        throw new Error('Not authorized, no token')
+      c.request.headers.set("userId", user?._id.toString());
+    } catch (error) {
+      c.set.status = 401;
+      throw new Error("Not authorized, invalid token");
     }
-}
+  }
+
+  if (!token) {
+    c.set.status = 401;
+    throw new Error("Not authorized, no token");
+  }
+};
 
 export const restro: any = async (c: Context) => {
-    let restroname
-    if (c.headers.restaurant) {
-        try {
-            restroname = c.headers.restaurant
-            const restro = await RestaurantModel.findOne({ name: restroname })
-            if (!restro) {
-                c.set.status = 401
-                throw new Error('Not authorized, invalid restaurant')
-            }
-            c.request.headers.set('restro', restro?._id.toString())
-        } catch (error) {
-            c.set.status = 401
-            throw new Error('Not authorized, invalid restaurant')
-        }
+  let restroname;
+  if (c.headers.restaurant) {
+    try {
+      restroname = c.headers.restaurant;
+      const restro = await RestaurantModel.findOne({ name: restroname });
+      if (!restro) {
+        c.set.status = 401;
+        throw new Error("Not authorized, invalid restaurant");
+      }
+      c.request.headers.set("restro", restro?._id.toString());
+    } catch (error) {
+      c.set.status = 401;
+      throw new Error("Not authorized, invalid restaurant");
     }
+  }
 
-    if (!restroname) {
-        c.set.status = 401
-        throw new Error('Not authorized, no restaurant')
-    }
-}
+  if (!restroname) {
+    c.set.status = 401;
+    throw new Error("Not authorized, no restaurant");
+  }
+};
