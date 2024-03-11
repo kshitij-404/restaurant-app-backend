@@ -2,15 +2,16 @@ import mongoose, { Schema, Document } from 'mongoose';
 
 // Define the user schema
 interface IOrder extends Document {
-    items: [{
+    items: {
         name: string;
         price: number;
         isVeg: boolean;
         quantity: number;
         menuItemRef: string;
-    }];
+    }[];
     id: number;
     status: "recieved" | "accepted" | "ready" | "delivered";
+    placedAt: Date;
 }
 
 const OrderSchema: Schema = new Schema({
@@ -43,6 +44,10 @@ const OrderSchema: Schema = new Schema({
     },
     status: {
         type: String,
+        required: true
+    },
+    placedAt: {
+        type: Date,
         required: true
     }
 });
