@@ -5,14 +5,15 @@ import menuItemRoutes from "./routes/menuItemRoutes";
 import orderRoutes from "./routes/orderRoutes";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
+import { cors } from "@elysiajs/cors";
 
 dotenv.config(); // Ensure a default empty string if undefined
-
-await mongoose.connect(process.env.MONGO_CONNECTION_STRING || "")
+await mongoose.connect(process.env.MONGO_CONNECTION_STRING || "");
 
 console.log("Connected to MongoDB");
 
-const app = new Elysia()
+const app = new Elysia();
+app.use(cors());
 
 app.get("/", () => "Hello Elysia");
 
