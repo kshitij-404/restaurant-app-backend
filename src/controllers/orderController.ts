@@ -1,6 +1,7 @@
 import { Context } from "elysia";
 import OrderModel from "../models/orderModel";
 import MenuItemModel from "../models/menuItemModel";
+import RestaurantModel from "../models/restaurantModel";
 
 export const createOrder = async (c: Context<{ body: { items: { quantity: number, menuItemRef: string }[] } }>) => {
     if (!c.body) throw new Error('No body provided')
@@ -13,6 +14,23 @@ export const createOrder = async (c: Context<{ body: { items: { quantity: number
             if (!menuItem) {
                 c.set.status = 400;
                 throw new Error("Invalid menu item");
+            }
+
+            if (menuItem.isAvailable === false) {
+                c.set.status = 400;
+                throw new Error("Menu item not available");
+            }
+            
+            const restaurant = await RestaurantModel.findById(menuItem.restaurant);
+
+            if (!restaurant) {
+                c.set.status = 400;
+                throw new Error("Invalid restaurant");
+            }
+
+            if (restaurant.isOpen === false) {
+                c.set.status = 400;
+                throw new Error("Restaurant not open");
             }
 
             return {
@@ -37,7 +55,9 @@ export const createOrder = async (c: Context<{ body: { items: { quantity: number
 
         const newId = highestOrder.length > 0 ? highestOrder[0].id + 1 : 1;
 
-        const order = new OrderModel({ items: detailedItems, id: newId, placedAt: new Date(), status: "recieved" });
+        const orderedBy = c.request.headers.get("userId");
+
+        const order = new OrderModel({ items: detailedItems, id: newId, placedAt: new Date(), status: "recieved", orderedBy: orderedBy });
 
         const newOrder = await order.save();
 

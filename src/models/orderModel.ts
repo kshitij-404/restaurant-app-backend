@@ -12,6 +12,7 @@ interface IOrder extends Document {
     id: number;
     status: "recieved" | "accepted" | "ready" | "delivered";
     placedAt: Date;
+    orderedBy: string;
 }
 
 const OrderSchema: Schema = new Schema({
@@ -48,6 +49,11 @@ const OrderSchema: Schema = new Schema({
     },
     placedAt: {
         type: Date,
+        required: true
+    },
+    orderedBy: {
+        type: String,
+        ref: 'User',
         required: true
     }
 });
