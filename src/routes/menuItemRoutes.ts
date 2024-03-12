@@ -9,11 +9,11 @@ import {
 const menuItemRoutes = (app: Elysia) => {
   return app.group("/api/v1/menu", (app) =>
     app
-      .get("/:id", getMenuItem, {
-        beforeHandle: (c) => auth(c),
-      })
       .get("/restro", getMenuItemsForRestro, {
         beforeHandle: (c) => restro(c),
+      })
+      .get("/:id", getMenuItem, {
+        beforeHandle: (c) => auth(c),
       })
       .put("/update-status/:id", updateMenuItemStatus, {
         beforeHandle: (c) => restro(c),
