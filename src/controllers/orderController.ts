@@ -69,6 +69,7 @@ export const createOrder = async (
       placedAt: new Date(),
       status: "recieved",
       orderedBy: orderedBy,
+      isVerified: true,
     });
 
     const newOrder = await order.save();
@@ -116,9 +117,9 @@ export const getAllUserOrders = async (c: Context) => {
   }
 };
 
-export const getAllOrders = async (c: Context) => {
+export const getAllOrders = async (c: Context<{ query: { status: "recieved" | "accepted" | "ready" | "delivered" } }>) => {
   try {
-    const orders = await OrderModel.find();
+    const orders = await OrderModel.find({isVerified: true, status: c.query?.status});
 
     return {
       status: c.set.status,
@@ -127,6 +128,7 @@ export const getAllOrders = async (c: Context) => {
       message: "Orders fetched successfully",
     };
   } catch (error) {
+    console.log(error);
     c.set.status = 500;
     throw new Error("Failed to fetch orders");
   }

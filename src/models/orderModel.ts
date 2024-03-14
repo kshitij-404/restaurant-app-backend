@@ -1,4 +1,4 @@
-import mongoose, { Schema, Document } from 'mongoose';
+import mongoose, { Schema, Document, ObjectId } from 'mongoose';
 
 // Define the user schema
 interface IOrder extends Document {
@@ -12,7 +12,8 @@ interface IOrder extends Document {
     id: number;
     status: "recieved" | "accepted" | "ready" | "delivered";
     placedAt: Date;
-    orderedBy: string;
+    orderedBy: ObjectId;
+    isVerified: boolean;
 }
 
 const OrderSchema: Schema = new Schema({
@@ -52,8 +53,12 @@ const OrderSchema: Schema = new Schema({
         required: true
     },
     orderedBy: {
-        type: String,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
+        required: true
+    },
+    isVerified: {
+        type: Boolean,
         required: true
     }
 });
