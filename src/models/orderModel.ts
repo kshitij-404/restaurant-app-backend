@@ -13,7 +13,8 @@ interface IOrder extends Document {
     status: "recieved" | "accepted" | "ready" | "delivered";
     placedAt: Date;
     orderedBy: ObjectId;
-    isVerified: boolean;
+    paymentStatus: "pending" | "success" | "failed";
+    paymentMetadata: Object;
 }
 
 const OrderSchema: Schema = new Schema({
@@ -57,9 +58,13 @@ const OrderSchema: Schema = new Schema({
         ref: 'User',
         required: true
     },
-    isVerified: {
-        type: Boolean,
-        required: true
+    paymentStatus: {
+        type: String,
+        required: true,
+        enum: ['pending', 'success', 'failed']
+    },
+    paymentMetadata: {
+        type: Object
     }
 });
 

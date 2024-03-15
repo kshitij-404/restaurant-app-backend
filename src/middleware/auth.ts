@@ -9,9 +9,10 @@ export const auth: any = async (c: Context) => {
     try {
       token = c.headers.authorization.split(" ")[1];
       const decoded = await jwt.verify(token);
-      const user = await UserModel.findById(decoded.userId);
+      const user = await UserModel.findById(decoded.userId).lean().exec();
 
       c.request.headers.set("userId", user?._id.toString());
+      c.request.headers.set("user", JSON.stringify(user));
     } catch (error) {
       c.set.status = 401;
       throw new Error("Not authorized, invalid token");

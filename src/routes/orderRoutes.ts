@@ -5,6 +5,7 @@ import {
   getAllOrders,
   getAllUserOrders,
   updateOrderStatus,
+  orderWebhook,
 } from "../controllers/orderController";
 
 const orderRoutes = (app: Elysia) => {
@@ -34,6 +35,8 @@ const orderRoutes = (app: Elysia) => {
       .put("/update-status/:id", updateOrderStatus, {
         beforeHandle: (c) => restro(c),
       })
+
+      .post("/webhook", orderWebhook)
   );
 };
 
