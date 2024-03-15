@@ -26,15 +26,13 @@ export const auth: any = async (c: Context) => {
 };
 
 export const restro: any = async (c: Context) => {
-  let restroname;
-  if (c.headers.restaurant) {
+  let token;
+  if (c.headers.authorization && c.headers.authorization.startsWith("Bearer")) {
     try {
-      restroname = c.headers.restaurant;
-      const restro = await RestaurantModel.findOne({ _id: restroname });
-      if (!restro) {
-        c.set.status = 401;
-        throw new Error("Not authorized, invalid restaurant");
-      }
+      token = c.headers.authorization.split(" ")[1];
+      const decoded = await jwt.verify(token);
+      const restro = await RestaurantModel.findById(decoded.id).lean().exec();
+
       c.request.headers.set("restro", restro?._id.toString());
     } catch (error) {
       c.set.status = 401;
@@ -42,8 +40,8 @@ export const restro: any = async (c: Context) => {
     }
   }
 
-  if (!restroname) {
+  if (!token) {
     c.set.status = 401;
-    throw new Error("Not authorized, no restaurant");
+    throw new Error("Not authorized, no token");
   }
 };
