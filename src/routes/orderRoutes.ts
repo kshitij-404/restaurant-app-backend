@@ -19,6 +19,7 @@ const orderRoutes = (app: Elysia) => {
               menuItemRef: t.String(),
             })
           ),
+          orderMode: t.String(),
         }),
         type: "json",
         beforeHandle: (c) => auth(c),

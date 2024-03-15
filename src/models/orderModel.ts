@@ -15,6 +15,7 @@ interface IOrder extends Document {
     orderedBy: ObjectId;
     paymentStatus: "pending" | "success" | "failed";
     paymentMetadata: Object;
+    orderMode: 'dinein' | 'takeaway';
 }
 
 const OrderSchema: Schema = new Schema({
@@ -65,6 +66,11 @@ const OrderSchema: Schema = new Schema({
     },
     paymentMetadata: {
         type: Object
+    },
+    orderMode: {
+        type: String,
+        required: true,
+        enum: ['dinein', 'takeaway']
     }
 });
 

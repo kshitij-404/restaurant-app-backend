@@ -6,7 +6,7 @@ import mongoose from "mongoose";
 import ky from "ky";
 
 export const createOrder = async (
-    c: Context<{ body: { items: { quantity: number; menuItemRef: string }[] } }>
+    c: Context<{ body: { items: { quantity: number; menuItemRef: string }[], orderMode: string } }>
 ) => {
     if (!c.body) throw new Error("No body provided");
 
@@ -71,6 +71,7 @@ export const createOrder = async (
             status: "recieved",
             orderedBy: orderedBy,
             paymentStatus: "pending",
+            orderMode: c.body.orderMode,
         });
 
         const newOrder = await order.save();
@@ -92,14 +93,6 @@ export const createOrder = async (
             customer_mobile: "0000000000",
             redirect_url: "http://google.com"
         };
-
-        // const createOrderFetch = edenFetch<App>('https://api.ekqr.in/api/');
-
-        // const payment = await createOrderFetch('/', {
-        //     method: 'POST',
-        //     body: paymentData,
-        // }
-        // );
 
         const payment = await ky.post('https://api.ekqr.in/api/create_order', {
             json: paymentData
