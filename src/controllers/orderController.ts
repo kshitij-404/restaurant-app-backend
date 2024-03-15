@@ -150,7 +150,7 @@ export const getAllUserOrders = async (c: Context) => {
 
         const orders = await OrderModel.find({
             orderedBy: new mongoose.Types.ObjectId(userId),
-        });
+        }).sort({ placedAt: -1 }).lean().exec();
 
         return {
             status: c.set.status,
@@ -167,7 +167,7 @@ export const getAllUserOrders = async (c: Context) => {
 
 export const getAllOrders = async (c: Context<{ query: { status: "recieved" | "accepted" | "ready" | "delivered" } }>) => {
     try {
-        const orders = await OrderModel.find({ paymentStatus: "success", status: c.query?.status });
+        const orders = await OrderModel.find({ paymentStatus: "success", status: c.query?.status }).sort({ placedAt: -1 }).lean().exec();
 
         return {
             status: c.set.status,
