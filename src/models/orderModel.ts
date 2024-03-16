@@ -14,7 +14,7 @@ interface IOrder extends Document {
     placedAt: Date;
     orderedBy: ObjectId;
     paymentStatus: "pending" | "success" | "failed";
-    paymentMetadata: Object;
+    paymentMetadata: any;
     orderMode: 'dinein' | 'takeaway';
 }
 

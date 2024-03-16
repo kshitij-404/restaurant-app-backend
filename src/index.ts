@@ -3,11 +3,12 @@ import authRoutes from "./routes/authRoutes";
 import userRoutes from "./routes/userRoutes";
 import menuItemRoutes from "./routes/menuItemRoutes";
 import orderRoutes from "./routes/orderRoutes";
+import cancelTxnCron from "./utils/cancelTxnCron";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import { cors } from "@elysiajs/cors";
 
-dotenv.config(); // Ensure a default empty string if undefined
+dotenv.config();
 await mongoose.connect(process.env.MONGO_CONNECTION_STRING || "");
 
 console.log("Connected to MongoDB");
@@ -21,6 +22,7 @@ app.use(authRoutes);
 app.use(userRoutes);
 app.use(menuItemRoutes);
 app.use(orderRoutes);
+app.use(cancelTxnCron);
 
 app.listen(3000);
 
