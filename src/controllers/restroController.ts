@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 import RestaurantModel from "../models/restaurantModel";
 
 export const getRestroDetails = async (
-  c: Context<{ params: { id: string } }>
+  c: Context
 ) => {
   const id = c.request.headers.get("restro");
 
