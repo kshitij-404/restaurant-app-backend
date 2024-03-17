@@ -7,6 +7,7 @@ import cancelTxnCron from "./utils/cancelTxnCron";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import { cors } from "@elysiajs/cors";
+import restroRoutes from "./routes/restroRoutes";
 
 dotenv.config();
 await mongoose.connect(process.env.MONGO_CONNECTION_STRING || "");
@@ -23,6 +24,7 @@ app.use(userRoutes);
 app.use(menuItemRoutes);
 app.use(orderRoutes);
 app.use(cancelTxnCron);
+app.use(restroRoutes);
 
 app.listen(3000);
 

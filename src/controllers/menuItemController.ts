@@ -1,6 +1,7 @@
 import { Context } from "elysia";
 import MenuItemModel from "../models/menuItemModel";
 import mongoose from "mongoose";
+import RestaurantModel from "../models/restaurantModel";
 
 export const getMenuItem = async (c: Context<{ params: { id: string } }>) => {
   if (c.params && !c.params?.id) {
@@ -11,11 +12,24 @@ export const getMenuItem = async (c: Context<{ params: { id: string } }>) => {
   const id = c.params.id;
 
   try {
-    const menuItems = await MenuItemModel.find({ restaurant: id })
+    const menuItemsPromise = MenuItemModel.find({ restaurant: id })
       .lean()
       .exec();
+      console.log("restro id", id)
+    const restroPromise = RestaurantModel.findOne({
+      _id: new mongoose.Types.ObjectId(id),
+    })
+      .lean()
+      .exec();
+    const [menuItems, restro] = await Promise.all([
+      menuItemsPromise,
+      restroPromise,
+    ]);
     c.set.status = 200;
-    return menuItems;
+    return {
+      menu: menuItems,
+      restaurant: restro,
+    };
   } catch (error) {
     c.set.status = 500;
     throw new Error("Failed to fetch menu items");
