@@ -6,6 +6,7 @@ import {
   getAllUserOrders,
   updateOrderStatus,
   orderWebhook,
+  poolingTxnStatus,
 } from "../controllers/orderController";
 
 const orderRoutes = (app: Elysia) => {
@@ -38,6 +39,7 @@ const orderRoutes = (app: Elysia) => {
       })
 
       .post("/webhook", orderWebhook)
+      .get("/pooling/:id", poolingTxnStatus)
   );
 };
 
