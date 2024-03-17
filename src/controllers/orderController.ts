@@ -68,7 +68,7 @@ export const createOrder = async (
             items: detailedItems,
             id: newId,
             placedAt: new Date(),
-            status: "recieved",
+            status: "received",
             orderedBy: orderedBy,
             paymentStatus: "pending",
             orderMode: c.body.orderMode,
@@ -165,7 +165,7 @@ export const getAllUserOrders = async (c: Context) => {
     }
 };
 
-export const getAllOrders = async (c: Context<{ query: { status: "recieved" | "accepted" | "ready" | "delivered" } }>) => {
+export const getAllOrders = async (c: Context<{ query: { status: "received" | "accepted" | "ready" | "delivered" } }>) => {
     try {
         const orders = await OrderModel.find({ paymentStatus: "success", status: c.query?.status }).sort({ placedAt: -1 }).lean().exec();
 
@@ -185,7 +185,7 @@ export const getAllOrders = async (c: Context<{ query: { status: "recieved" | "a
 export const updateOrderStatus = async (
     c: Context<{
         params: { id: string };
-        body: { status: "recieved" | "accepted" | "ready" | "delivered" };
+        body: { status: "received" | "accepted" | "ready" | "delivered" };
     }>
 ) => {
     if (!c.params) throw new Error("No params provided");

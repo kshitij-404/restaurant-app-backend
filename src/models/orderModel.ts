@@ -10,7 +10,7 @@ interface IOrder extends Document {
         menuItemRef: string;
     }[];
     id: number;
-    status: "recieved" | "accepted" | "ready" | "delivered";
+    status: "received" | "accepted" | "ready" | "delivered";
     placedAt: Date;
     orderedBy: ObjectId;
     paymentStatus: "pending" | "success" | "failed";
