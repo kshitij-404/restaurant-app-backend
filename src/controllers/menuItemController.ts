@@ -15,7 +15,7 @@ export const getMenuItem = async (c: Context<{ params: { id: string } }>) => {
     const menuItemsPromise = MenuItemModel.find({ restaurant: id })
       .lean()
       .exec();
-      console.log("restro id", id)
+    console.log("restro id", id);
     const restroPromise = RestaurantModel.findOne({
       _id: new mongoose.Types.ObjectId(id),
     })
@@ -89,5 +89,44 @@ export const updateMenuItemStatus = async (
   } catch (error) {
     c.set.status = 500;
     throw new Error("Failed to update menu item status");
+  }
+};
+
+export const updateCategoryStatus = async (
+  c: Context<{ params: { category: string }; body: { isAvailable: boolean } }>
+) => {
+  if (!c.params?.category) {
+    c.set.status = 400;
+    throw new Error("No Category Name provided");
+  }
+
+  if (!c.body) {
+    c.set.status = 400;
+    throw new Error("No body provided");
+  }
+
+  const { category } = c.params;
+  const { isAvailable } = c.body;
+
+  try {
+    const menuItem = await MenuItemModel.find({ category })
+      .lean()
+      .exec();
+
+    if (menuItem.length === 0) {
+      c.set.status = 404;
+      throw new Error("Category not found");
+    }
+
+    await MenuItemModel.updateMany({ category }, { isAvailable });
+
+    return {
+      status: c.set.status,
+      success: true,
+      message: "Menu Category status updated successfully",
+    };
+  } catch (error) {
+    c.set.status = 500;
+    throw new Error("Failed to update menu category status");
   }
 };
