@@ -10,6 +10,7 @@
 
 ## Features
 - Separate Customer And Client Login
+- Live Payment Gateway Integration
 - CRUD operations for restaurants, restaurant menus and customers
 - Role Based Access to Data and Functons (Customer, Restaurant Owner)
 - Calculating general order analysis (Total orders, Profit made, Monthly revenue, Peak time)
